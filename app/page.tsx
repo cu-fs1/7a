@@ -30,14 +30,18 @@ export default function Home() {
   const [data, setData] = useState<ProductsResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const apiBaseUrl =
+    process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:3000";
 
   useEffect(() => {
+    const productsUrl = new URL("/products", apiBaseUrl).toString();
+
     axios
-      .get<ProductsResponse>("http://localhost:3000/products")
+      .get<ProductsResponse>(productsUrl)
       .then((res) => setData(res.data))
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [apiBaseUrl]);
 
   return (
     <div className="min-h-screen bg-zinc-50 font-sans dark:bg-black">
